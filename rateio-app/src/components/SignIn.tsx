@@ -7,7 +7,7 @@ export default function SignIn() {
   const { data: session } = useSession()
 
   if (session && session.user) {
-    console.log(session.user)
+    console.log(session)
     return (
       <div className="absolute top-0 left-0 p-4">
         <div className="flex items-center gap-3 text-center hover:text-gray-50 transition-colors">
