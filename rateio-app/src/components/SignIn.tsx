@@ -3,11 +3,21 @@ import Image from 'next/image'
 import { User } from "lucide-react";
 import { signIn, signOut, useSession } from "next-auth/react";
 
+interface User {
+  name?: string | null | undefined;
+  email?: string | null | undefined;
+  image?: string | null | undefined;
+  accessToken?: string | null | undefined;
+}
+
+
 export default function SignIn() {
   const { data: session } = useSession()
 
   if (session && session.user) {
-    console.log(session)
+    const { user } = session as { user: User };
+
+    console.log('user', user.accessToken)
     return (
       <div className="absolute top-0 left-0 p-4">
         <div className="flex items-center gap-3 text-center hover:text-gray-50 transition-colors">
