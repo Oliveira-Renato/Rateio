@@ -18,6 +18,10 @@
   "dependencies": {
     "@fastify/cors": "^8.4.1",
     "@prisma/client": "^5.5.1",
-    "fastify": "^4.24.3"
+    "axios": "^1.6.0",
+    "fastify": "^4.24.3",
+    "fastify-oauth2": "^4.6.0",
+    "firebase-admin": "^11.11.0",
+    "zod": "^3.22.4"
   }
 }
