@@ -49,7 +49,16 @@ export async function groupsRoutes(app: FastifyInstance): Promise<void> {
       const { userId } = querySchema.parse(request.query);
 
       const group = await prisma.group.findUnique({
-        where: { id },
+        where: {
+          id,
+        },
+        include: {
+          participants: {
+            include: {
+              expenses: true,
+            },
+          },
+        },
       });
 
       if (!group || group.userId !== userId) {

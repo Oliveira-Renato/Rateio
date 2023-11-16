@@ -7,6 +7,7 @@ import cors from '@fastify/cors'
 import { registerUser } from './routes/register'
 import { groupsRoutes } from './routes/groups'
 import { participantsRoutes } from './routes/participants'
+import { expensesRoutes } from './routes/expenses'
 
 const app = fastify()
 
@@ -17,6 +18,7 @@ app.register(cors, {
 app.register(registerUser)
 app.register(groupsRoutes)
 app.register(participantsRoutes)
+app.register(expensesRoutes)
 
 app.listen({
   port: 3333,

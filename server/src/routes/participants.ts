@@ -40,6 +40,9 @@ export async function participantsRoutes(app: FastifyInstance) {
 
       const participant = await prisma.participant.findUnique({
         where: { id },
+        include: {
+          expenses: true
+        }
       });
 
       if (!participant || participant.userId !== userId) {
