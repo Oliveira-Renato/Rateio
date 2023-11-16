@@ -151,12 +151,22 @@ export async function participantsRoutes(app: FastifyInstance) {
       let participant = await prisma.participant.findUnique({
         where: {
           id,
-        }
+        },
+        include: {
+          expenses: true,
+        },
       });
 
       if (!participant || participant.userId !== userId) {
         return reply.status(401).send('Não autorizado ou não existe tal grupo! 😞');
       }
+
+      // Exclua as despesas associadas ao participante
+      await prisma.expense.deleteMany({
+        where: {
+          participantId: id,
+        },
+      });
 
       await prisma.participant.delete({
         where: {

@@ -1,8 +1,20 @@
-import { FastifyInstance } from 'fastify'
+import { FastifyInstance, FastifyReply } from 'fastify'
 import { z } from 'zod'
 import { prisma } from '../lib/prisma'
 
-export async function groupsRoutes(app: FastifyInstance) {
+enum HttpStatus {
+  Ok = 200,
+  BadRequest = 400,
+  Unauthorized = 401,
+  InternalServerError = 500,
+}
+
+async function handleErrors(reply: FastifyReply, statusCode: HttpStatus, message: string): Promise<void> {
+  console.error(`Error: ${statusCode} - ${message}`);
+  return reply.status(statusCode).send(message);
+}
+
+export async function groupsRoutes(app: FastifyInstance): Promise<void> {
   app.get('/groups', async (request, reply) => {
     const groupSchema = z.object({
       userId: z.string(),
@@ -12,14 +24,13 @@ export async function groupsRoutes(app: FastifyInstance) {
       const { userId } = groupSchema.parse(request.query);
 
       if (!userId) {
-        return reply.status(401).send(); // Forbidden
+        return handleErrors(reply, HttpStatus.Unauthorized, 'Usuário não autenticado');
       }
 
       const groups = await prisma.group.findMany();
       return groups;
     } catch (error) {
-      console.error('Error parsing request body:', error);
-      return reply.status(400).send('Bad Request'); // Bad Request if parsing fails
+      return handleErrors(reply, HttpStatus.BadRequest, 'Erro na solicitação');
     }
   });
 
@@ -32,7 +43,6 @@ export async function groupsRoutes(app: FastifyInstance) {
     const querySchema = z.object({
       userId: z.string(),
     });
-
 
     try {
       const { id } = paramsSchema.parse(request.params);
@@ -132,7 +142,6 @@ export async function groupsRoutes(app: FastifyInstance) {
     }
   });
 
-
   app.delete('/groups/:id', async (request, reply) => {
     const paramsSchema = z.object({
       id: z.string().uuid(),
@@ -149,22 +158,47 @@ export async function groupsRoutes(app: FastifyInstance) {
       let group = await prisma.group.findUnique({
         where: {
           id,
-        }
+        },
+        include: {
+          participants: {
+            include: {
+              expenses: true,
+            },
+          },
+        },
       });
 
       if (!group || group.userId !== userId) {
-        return reply.status(401).send('Não autorizado ou não existe tal grupo! 😞');
+        return handleErrors(reply, HttpStatus.Unauthorized, 'Não autorizado ou grupo não existe');
       }
 
+      // Exclua as despesas associadas aos participantes do grupo
+      for (const participant of group.participants) {
+        await prisma.expense.deleteMany({
+          where: {
+            participantId: participant.id,
+          },
+        });
+      }
+
+      // Exclua os participantes do grupo
+      await prisma.participant.deleteMany({
+        where: {
+          groupId: id,
+        },
+      });
+
+      // Finalmente, exclua o grupo
       await prisma.group.delete({
         where: {
           id,
         },
-      })
+      });
 
+      return reply.status(HttpStatus.Ok).send('Grupo excluído com sucesso');
     } catch (error) {
       console.error('Error processing request:', error);
-      return reply.status(500).send('Erro interno do servidor');
+      return reply.status(HttpStatus.InternalServerError).send('Erro interno do servidor');
     }
   });
 }
