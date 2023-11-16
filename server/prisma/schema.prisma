@@ -12,6 +12,46 @@ datasource db {
 
 //schemes
 model User {
-  id   String @id @default(uuid())
-  name String
+  id        String  @id @default(uuid())
+  googleId  String  @unique
+  name      String
+  email     String
+  avatarUrl String?
+
+  groups       Group[]
+  userExpenses Expense[]
+}
+
+model Group {
+  id     String @id @default(uuid())
+  userId String
+
+  name      String
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [googleId])
+
+  participants Participant[]
+}
+
+model Participant {
+  id      String @id @default(uuid())
+  groupId String
+  userId  String
+  name    String
+
+  group    Group     @relation(fields: [groupId], references: [id])
+  expenses Expense[]
+}
+
+model Expense {
+  id            String   @id @default(uuid())
+  groupId       String
+  userId        String
+  participantId String
+  expense       Decimal
+  createdAt     DateTime @default(now())
+
+  participants Participant @relation(fields: [participantId], references: [id])
+  user         User        @relation(fields: [userId], references: [googleId])
 }

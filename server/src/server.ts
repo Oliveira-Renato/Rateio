@@ -2,17 +2,21 @@ import 'dotenv/config'
 
 import fastify from "fastify"
 import cors from '@fastify/cors'
-import { authRoutes } from './routes/auth'
-import { authTeste } from './routes/teste'
-import { revokeToken } from './routes/revoke'
+// import { authRoutes } from './routes/auth'
+// import { revokeToken } from './routes/revoke'
+import { registerUser } from './routes/register'
+import { groupsRoutes } from './routes/groups'
+import { participantsRoutes } from './routes/participants'
 
 const app = fastify()
 
 app.register(cors, {
   origin: true, //true : todos URLs de front-end pode acessar esse back-end. prodution: use ['http://localhost:3000','url',...]
 })
-app.register(authRoutes)
-app.register(revokeToken)
+
+app.register(registerUser)
+app.register(groupsRoutes)
+app.register(participantsRoutes)
 
 app.listen({
   port: 3333,

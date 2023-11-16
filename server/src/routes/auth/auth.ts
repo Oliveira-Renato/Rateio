@@ -4,7 +4,7 @@ import { z } from 'zod';
 import { prisma } from '../lib/prisma';
 
 export async function authRoutes(app: FastifyInstance) {
-  app.post('/register', async (request) => {
+  app.post('/teste', async (request) => {
     try {
       const bodySchema = z.object({
         code: z.string(),
