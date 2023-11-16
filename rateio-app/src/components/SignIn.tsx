@@ -12,12 +12,18 @@ interface User {
 
 
 export default function SignIn() {
-  const { data: session } = useSession()
+  const { data: session, status } = useSession();
+
+  if (status === "loading") {
+    return <p>Carregando...</p>;
+  }
 
   if (session && session.user) {
-    const { user } = session as { user: User };
+    // const accessToken = session.accessToken;
+    let googleId = session.googleId
+    const { name, email, image } = session.user
 
-    console.log('user', user.accessToken)
+
     return (
       <div className="absolute top-0 left-0 p-4">
         <div className="flex items-center gap-3 text-center hover:text-gray-50 transition-colors">
