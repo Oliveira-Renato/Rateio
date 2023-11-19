@@ -2,6 +2,8 @@ import type { Metadata } from 'next'
 import { Roboto_Flex as Roboto } from 'next/font/google'
 import './globals.css'
 import Providers from '@/components/Providers'
+import Hero from '@/components/Hero'
+import SignIn from '@/components/SignIn'
 
 const roboto = Roboto({ subsets: ['latin'], variable: '--font-roboto' })
 
@@ -19,7 +21,28 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${roboto.variable} font-sans bg-gray-900 text-gray-100`}>
         <Providers>
-          {children}
+          <main className="grid grid-cols-2 min-h-screen">
+            {/* left */}
+            <div className="flex flex-col items-start justify-between px-28 py-16 relative overflow-hidden border-r border-white/10 bg-[url(../assets/bg-stars.svg)] bg-cover">
+              {/* blur  */}
+              <div className="absolute right-0 top-1/2 h-[288px] w-[526px] rounded-full blur-full -translate-y-1/2 translate-x-1/2 bg-purple-700 opacity-50" />
+
+              {/* stripes  */}
+              <div className="absolute bottom-0 right-2 top-0 w-2 bg-stripes" />
+
+              {/* Sign in */}
+              <SignIn />
+
+              {/* Hero */}
+              <Hero />
+
+            </div>
+
+            {/* right */}
+            <div className="flex flex-col p-16 bg-[url(../assets/bg-stars.svg)] bg-cover">
+              {children}
+            </div>
+          </main>
         </Providers>
       </body>
     </html>
