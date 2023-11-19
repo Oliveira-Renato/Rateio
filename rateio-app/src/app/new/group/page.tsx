@@ -11,7 +11,7 @@ export default function NewGroup() {
     // Exemplo: fetch('/grupos', { method: 'POST', body: JSON.stringify({ name }) })
 
     // Redirecionar para a próxima tela
-    router.push('/adicionar-participantes');
+    router.push('/new/participants');
   };
 
   const handleCancelar = () => {
