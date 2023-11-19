@@ -3,6 +3,8 @@ import axios from 'axios';
 import { z } from 'zod';
 import { prisma } from '../lib/prisma';
 
+const host = 'http://localhost:3333'
+
 export async function registerUser(app: FastifyInstance) {
   app.post('/register', async (request, res) => {
     try {
@@ -30,8 +32,10 @@ export async function registerUser(app: FastifyInstance) {
             avatarUrl: userInfo.avatar_url,
           },
         })
+        res.send('Usuario cadastrado com sucesso!')
       } else {
-        res.send('Usuario já cadastrado')
+        const { data: groups } = await axios.get(`${host}/groups?userId=${userInfo.id}`);
+        res.send(groups);
       }
 
     } catch (error) {
