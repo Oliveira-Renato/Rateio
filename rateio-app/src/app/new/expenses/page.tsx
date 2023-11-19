@@ -1,5 +1,5 @@
 export default function NewExpense() {
   return (
-    <h1>Nova despesa</h1>
+    <h2>Adiciona despesas</h2>
   )
 }
