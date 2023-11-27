@@ -34,7 +34,6 @@ export async function groupsRoutes(app: FastifyInstance): Promise<void> {
     }
   });
 
-
   app.get('/groups/:id', async (request, reply) => {
     const paramsSchema = z.object({
       id: z.string().uuid(),
@@ -72,7 +71,6 @@ export async function groupsRoutes(app: FastifyInstance): Promise<void> {
     }
   });
 
-
   app.post('/groups', async (request, reply) => {
     const bodySchema = z.object({
       name: z.string(),
@@ -105,7 +103,6 @@ export async function groupsRoutes(app: FastifyInstance): Promise<void> {
       return reply.status(500).send('Erro interno do servidor');
     }
   });
-
 
   app.put('/groups/:id', async (request, reply) => {
     const paramsSchema = z.object({

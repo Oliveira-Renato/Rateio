@@ -7,15 +7,11 @@ export default function NewGroup() {
   const router = useRouter();
 
   const handleAvancar = () => {
-    // Adicione a lógica para enviar os dados para a rota '/grupos'
-    // Exemplo: fetch('/grupos', { method: 'POST', body: JSON.stringify({ name }) })
-
-    // Redirecionar para a próxima tela
-    router.push('/new/participants');
+    // Certifique-se de passar o valor do input para a próxima página
+    router.push(`/new/participants?name=${encodeURIComponent(name)}`);
   };
 
   const handleCancelar = () => {
-    // Voltar para a tela inicial
     router.push('/');
   };
 
@@ -33,6 +29,7 @@ export default function NewGroup() {
                 id="titulo"
                 className="flex-1 border border-white/10 py-2 px-4 rounded-md focus:outline-none focus:border-purple-500 bg-transparent transition duration-300 ease-in-out"
                 placeholder="Digite o título da despesa"
+                onChange={(e) => setName(e.target.value)}
               />
             </div>
           </label>
@@ -46,7 +43,7 @@ export default function NewGroup() {
             </button>
             <button
               type="button"
-              onClick={handleAvancar}
+              onClick={() => handleAvancar()}
               className="bg-purple-500 text-white border border-white/10 py-2 px-4 rounded-md hover:bg-purple-700 transition duration-300 ease-in-out"
             >
               Avançar

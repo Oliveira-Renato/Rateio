@@ -1,11 +1,16 @@
 'use client'
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useSearchParams } from 'next/navigation'
 
 export default function NewParticpants() {
   const [nomeParticipante, setNomeParticipante] = useState('');
   const [participantes, setParticipantes] = useState<string[]>([]);
+
   const router = useRouter();
+  const searchParams = useSearchParams()//get param from new/groups
+
+  const groupName = searchParams.get('name')
 
   const handleAdicionarParticipante = () => {
     if (nomeParticipante.trim() !== '') {
@@ -15,14 +20,18 @@ export default function NewParticpants() {
   };
 
   const handleVoltar = () => {
-    // Adicione lógica adicional, se necessário
     router.push('/new/group');
   };
 
   const handleAvancar = () => {
-    // Adicione a lógica para avançar para a próxima tela ('/expenses') com os dados necessários
-    // Inclua o array de participantes (participantes) nas suas requisições ou lógica aqui
-    router.push('/new/expenses');
+    const params = new URLSearchParams()
+    const data = {
+      groupName,
+      participantes
+    }
+
+    params.set('data-group', JSON.stringify(data))
+    router.push(`/new/expenses?${params}`);
   };
 
   const handleRemoveParticipant = (indexToRemove: any) => {
@@ -34,7 +43,7 @@ export default function NewParticpants() {
   return (
     <div className="px-10 py-20">
       <h2 className="text-3xl font-bold mb-2 text-center">Adicionar Participantes</h2>
-      <h5 className="text-sm text-center mb-8">Adicione uma ou mais pessoas que deseja dividir a despesa</h5>
+      <h5 className="text-sm text-center mb-8">Adicione uma ou mais pessoas que deseja dividir as despesas</h5>
       <div className="flex flex-col items-center justify-center">
         <form className="w-full">
           {participantes.map((participante, index) => (
