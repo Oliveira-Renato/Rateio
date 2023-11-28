@@ -1,12 +1,19 @@
 'use client'
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 export default function NewGroup() {
-  const [name, setName] = useState('');
+  const storedData = localStorage.getItem('nameGroup') || '';
+
+  const [name, setName] = useState(storedData);
   const router = useRouter();
 
+  useEffect(() => {
+
+  }, [storedData]);
+
   const handleAvancar = () => {
+    localStorage.setItem('nameGroup', JSON.stringify(name));
     // Certifique-se de passar o valor do input para a próxima página
     router.push(`/new/participants?name=${encodeURIComponent(name)}`);
   };

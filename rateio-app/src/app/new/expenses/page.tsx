@@ -21,7 +21,7 @@ export default function NewExpense() {
   };
 
   const handleVoltar = () => {
-    router.push('/new/group');
+    router.push('/new/participants');
   };
 
   const handleAvancar = () => {
@@ -42,6 +42,22 @@ export default function NewExpense() {
         <form className="w-full">
 
 
+          <div className="flex justify-between mt-8">
+            <button
+              type="button"
+              onClick={handleVoltar}
+              className="bg-gray-900 text-gray-100 border border-white/10 py-2 px-4 rounded-md hover:bg-purple-500 transition duration-300 ease-in-out"
+            >
+              Voltar
+            </button>
+            <button
+              type="button"
+              onClick={handleAvancar}
+              className="bg-purple-500 text-white border border-white/10 py-2 px-4 rounded-md hover:bg-purple-700 transition duration-300 ease-in-out"
+            >
+              Salvar
+            </button>
+          </div>
         </form>
       </div>
     </div>
