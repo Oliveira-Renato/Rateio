@@ -33,7 +33,7 @@ export default function NewParticpants() {
       <div className="flex flex-col items-center justify-center">
         <form className="w-full">
           {participants.map((participante, index) => (
-            <div key={index} className="flex items-end justify-between text-gray-400 border-b-2 border-b-orange-500">
+            <div key={index} className="flex items-end mb-2 justify-between text-gray-400 border-b-2 border-b-orange-500">
               <p>{participante}</p>
               <button
                 type="button"
