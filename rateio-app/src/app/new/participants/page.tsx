@@ -1,52 +1,38 @@
 'use client'
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useSearchParams } from 'next/navigation'
+import { useGlobalContext } from '@/app/context/store';
 
 export default function NewParticpants() {
+  const { participants, setParticipants } = useGlobalContext();
   const [nomeParticipante, setNomeParticipante] = useState('');
-  const [participantes, setParticipantes] = useState<string[]>([]);
 
   const router = useRouter();
-  const searchParams = useSearchParams()//get param from new/groups
-
-  const groupName = searchParams.get('name')
 
   const handleAdicionarParticipante = () => {
     if (nomeParticipante.trim() !== '') {
-      setParticipantes([...participantes, nomeParticipante]);
+      setParticipants([...participants, nomeParticipante]);
       setNomeParticipante('');
     }
   };
 
-  const handleVoltar = () => {
-    router.push('/new/group');
-  };
+  const handleVoltar = () => router.push('/new/group');
 
-  const handleAvancar = () => {
-    const params = new URLSearchParams()
-    const data = {
-      groupName,
-      participantes
-    }
-
-    params.set('data-group', JSON.stringify(data))
-    router.push(`/new/expenses?${params}`);
-  };
+  const handleAvancar = () => router.push('/new/expenses');
 
   const handleRemoveParticipant = (indexToRemove: any) => {
-    setParticipantes((prevParticipantes) =>
+    setParticipants((prevParticipantes) =>
       prevParticipantes.filter((_, index) => index !== indexToRemove)
     );
   }
 
   return (
     <div className="px-10 py-20">
-      <h2 className="text-3xl font-bold mb-2 text-center">Adicionar Participantes</h2>
+      <h2 className="text-3xl font-bold mb-2 text-center">Adicionar participants</h2>
       <h5 className="text-sm text-center mb-8">Adicione uma ou mais pessoas que deseja dividir as despesas</h5>
       <div className="flex flex-col items-center justify-center">
         <form className="w-full">
-          {participantes.map((participante, index) => (
+          {participants.map((participante, index) => (
             <div key={index} className="flex items-end justify-between text-gray-400 border-b-2 border-b-orange-500">
               <p>{participante}</p>
               <button

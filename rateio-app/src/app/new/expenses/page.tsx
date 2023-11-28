@@ -1,38 +1,17 @@
 'use client'
-import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { useSearchParams } from 'next/navigation'
+import { useGlobalContext } from '@/app/context/store';
 
 export default function NewExpense() {
-  const [nomeParticipante, setNomeParticipante] = useState('');
-  const [participantes, setParticipantes] = useState<string[]>([]);
+  const { name: groupName, participants } = useGlobalContext();
 
   const router = useRouter();
-  const searchParams = useSearchParams()//get param from new/groups
 
-  const data = searchParams.get('data-group') || ''
-  const dataGroup = JSON.parse(data)
-  console.log(dataGroup)
-  const handleAdicionarParticipante = () => {
-    if (nomeParticipante.trim() !== '') {
-      setParticipantes([...participantes, nomeParticipante]);
-      setNomeParticipante('');
-    }
-  };
-
-  const handleVoltar = () => {
-    router.push('/new/participants');
-  };
+  const handleVoltar = () => router.push('/new/participants');
 
   const handleAvancar = () => {
 
   };
-
-  const handleRemoveParticipant = (indexToRemove: any) => {
-    setParticipantes((prevParticipantes) =>
-      prevParticipantes.filter((_, index) => index !== indexToRemove)
-    );
-  }
 
   return (
     <div className="px-10 py-20">

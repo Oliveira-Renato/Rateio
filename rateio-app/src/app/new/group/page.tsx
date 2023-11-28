@@ -1,26 +1,15 @@
 'use client'
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { useGlobalContext } from '@/app/context/store';
 
 export default function NewGroup() {
-  const storedData = localStorage.getItem('nameGroup') || '';
-
-  const [name, setName] = useState(storedData);
+  const { name, setName } = useGlobalContext();
   const router = useRouter();
 
-  useEffect(() => {
+  const handleAvancar = () => router.push('/new/participants');
 
-  }, [storedData]);
-
-  const handleAvancar = () => {
-    localStorage.setItem('nameGroup', JSON.stringify(name));
-    // Certifique-se de passar o valor do input para a próxima página
-    router.push(`/new/participants?name=${encodeURIComponent(name)}`);
-  };
-
-  const handleCancelar = () => {
-    router.push('/');
-  };
+  const handleCancelar = () => router.push('/');
 
   return (
     <div className="px-10 py-20">
@@ -34,6 +23,7 @@ export default function NewGroup() {
               <input
                 type="text"
                 id="titulo"
+                value={name}
                 className="flex-1 border border-white/10 py-2 px-4 rounded-md focus:outline-none focus:border-purple-500 bg-transparent transition duration-300 ease-in-out"
                 placeholder="Digite o título da despesa"
                 onChange={(e) => setName(e.target.value)}

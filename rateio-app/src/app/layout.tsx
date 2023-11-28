@@ -4,6 +4,7 @@ import './globals.css'
 import Providers from '@/components/Providers'
 import Hero from '@/components/Hero'
 import SignIn from '@/components/SignIn'
+import { GlobalContextProvider } from './context/store'
 
 const roboto = Roboto({ subsets: ['latin'], variable: '--font-roboto' })
 
@@ -40,7 +41,9 @@ export default function RootLayout({
 
             {/* right */}
             <div className="flex flex-col p-16 bg-[url(../assets/bg-stars.svg)] bg-cover">
-              {children}
+              <GlobalContextProvider>
+                {children}
+              </GlobalContextProvider>
             </div>
           </main>
         </Providers>
