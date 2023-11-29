@@ -1,19 +1,71 @@
 'use client'
 import { useRouter } from 'next/navigation';
 import { useGlobalContext } from '@/app/context/store';
-
 import React, { useState } from 'react';
+import { useSession } from 'next-auth/react';
+import axios from 'axios';
+
+interface PropsGroup {
+  userId: string,
+  name?: string
+}
+
+interface PropsParticipants {
+  name: string,
+  userId: string,
+  groupId: string
+}
+
+const saveGroup = async (groupData: PropsGroup) => {
+  try {
+    const response = await axios.post('http://localhost:3333/groups', groupData);
+    const { data } = await response
+    return data
+  } catch (error) {
+    console.error('Erro na criação do grupo:', error);
+  }
+}
+const saveParticipants = async (participantData: PropsParticipants) => {
+  try {
+    const response = await axios.post('http://localhost:3333/participants', participantData);
+    console.log('part', response.data)
+    return response.data
+  } catch (error) {
+    console.error('Erro na criação do grupo:', error);
+  }
+}
+
 
 export default function NewExpense() {
-  const { name: groupName, participants } = useGlobalContext();
   const router = useRouter();
+  const { data: session } = useSession();
+  const { name: groupName, participants } = useGlobalContext();
   const [expenseValues, setExpenseValues] = useState(participants.map(() => ''));
 
   const handleVoltar = () => router.push('/new/participants');
 
-  const handleSalvar = () => {
-    // Aqui você pode usar o array expenseValues para obter os valores das despesas.
-    // Certifique-se de validar e processar os dados conforme necessário.
+  const handleSalvar = async () => {
+    if (session) {
+      const groupData = {
+        userId: session.googleId ?? '',
+        name: groupName
+      };
+
+      const groupResponse = await saveGroup(groupData)
+
+      if (Object.entries(groupResponse).length) {
+        participants.map(async (participant, index) => {
+          const data = {
+            name: participant,
+            userId: session.googleId ?? '',
+            groupId: groupResponse.id
+          }
+          await saveParticipants(data)
+        })
+      }
+
+    }
+
   };
 
   const formatCurrency = (value: string) => {
@@ -35,6 +87,7 @@ export default function NewExpense() {
       <h2 className="text-3xl font-bold mb-2 text-center">Adicionar Despesas</h2>
       <h5 className="text-sm text-center mb-8">Preencha os gastos de cada integrante</h5>
       <div className="flex flex-col items-center justify-center">
+        {/* formulario */}
         <form className="w-full">
           <div className="mb-4">
             <h5 className="text-lg font-bold mb-2 text-center">{groupName}</h5>
