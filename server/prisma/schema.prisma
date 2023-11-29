@@ -18,8 +18,7 @@ model User {
   email     String
   avatarUrl String?
 
-  groups       Group[]
-  userExpenses Expense[]
+  groups Group[]
 }
 
 model Group {
@@ -28,30 +27,17 @@ model Group {
 
   name      String
   createdAt DateTime @default(now())
-
-  user User @relation(fields: [userId], references: [googleId])
+  user      User     @relation(fields: [userId], references: [googleId])
 
   participants Participant[]
 }
 
 model Participant {
-  id      String @id @default(uuid())
+  id      String  @id @default(uuid())
   groupId String
   userId  String
   name    String
+  expense Decimal
 
-  group    Group     @relation(fields: [groupId], references: [id])
-  expenses Expense[]
-}
-
-model Expense {
-  id            String   @id @default(uuid())
-  groupId       String
-  userId        String
-  participantId String
-  expense       Decimal
-  createdAt     DateTime @default(now())
-
-  participants Participant @relation(fields: [participantId], references: [id])
-  user         User        @relation(fields: [userId], references: [googleId])
+  group Group @relation(fields: [groupId], references: [id])
 }

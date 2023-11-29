@@ -52,11 +52,7 @@ export async function groupsRoutes(app: FastifyInstance): Promise<void> {
           id,
         },
         include: {
-          participants: {
-            include: {
-              expenses: true,
-            },
-          },
+          participants: true
         },
       });
 
@@ -166,11 +162,7 @@ export async function groupsRoutes(app: FastifyInstance): Promise<void> {
           id,
         },
         include: {
-          participants: {
-            include: {
-              expenses: true,
-            },
-          },
+          participants: true
         },
       });
 

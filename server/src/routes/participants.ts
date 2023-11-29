@@ -40,9 +40,6 @@ export async function participantsRoutes(app: FastifyInstance) {
 
       const participant = await prisma.participant.findUnique({
         where: { id },
-        include: {
-          expenses: true
-        }
       });
 
       if (!participant || participant.userId !== userId) {
@@ -62,10 +59,11 @@ export async function participantsRoutes(app: FastifyInstance) {
       name: z.string(),
       groupId: z.string().uuid(),
       userId: z.string(),
+      expense: z.number(),
     });
 
     try {
-      const { name, groupId, userId } = bodySchema.parse(request.body);
+      const { name, groupId, userId, expense } = bodySchema.parse(request.body);
 
       const user = await prisma.user.findUnique({
         where: {
@@ -81,7 +79,8 @@ export async function participantsRoutes(app: FastifyInstance) {
         data: {
           name,
           userId,
-          groupId
+          groupId,
+          expense
         },
       });
 
@@ -104,12 +103,14 @@ export async function participantsRoutes(app: FastifyInstance) {
 
     const bodySchema = z.object({
       name: z.string(),
+      expense: z.number()
     });
 
     try {
       const { id } = paramsSchema.parse(request.params);
       const { userId } = querySchema.parse(request.query);
       const { name } = bodySchema.parse(request.body);
+      const { expense } = bodySchema.parse(request.body);
 
       let participant = await prisma.participant.findUnique({
         where: {
@@ -127,6 +128,7 @@ export async function participantsRoutes(app: FastifyInstance) {
         },
         data: {
           name,
+          expense
         },
       })
 
@@ -154,22 +156,13 @@ export async function participantsRoutes(app: FastifyInstance) {
       let participant = await prisma.participant.findUnique({
         where: {
           id,
-        },
-        include: {
-          expenses: true,
-        },
+        }
       });
 
       if (!participant || participant.userId !== userId) {
         return reply.status(401).send('Não autorizado ou não existe tal grupo! 😞');
       }
 
-      // Exclua as despesas associadas ao participante
-      await prisma.expense.deleteMany({
-        where: {
-          participantId: id,
-        },
-      });
 
       await prisma.participant.delete({
         where: {
