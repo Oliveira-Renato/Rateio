@@ -13,7 +13,8 @@ interface PropsGroup {
 interface PropsParticipants {
   name: string,
   userId: string,
-  groupId: string
+  groupId: string,
+  expense: number
 }
 
 const saveGroup = async (groupData: PropsGroup) => {
@@ -51,21 +52,24 @@ export default function NewExpense() {
         name: groupName
       };
 
-      const groupResponse = await saveGroup(groupData)
+      try {
+        const groupResponse = await saveGroup(groupData)
 
-      if (Object.entries(groupResponse).length) {
-        participants.map(async (participant, index) => {
-          const data = {
-            name: participant,
-            userId: session.googleId ?? '',
-            groupId: groupResponse.id
-          }
-          await saveParticipants(data)
-        })
+        if (Object.entries(groupResponse).length) {
+          participants.map(async (participant, index) => {
+            const data = {
+              name: participant,
+              userId: session.googleId ?? '',
+              groupId: groupResponse.id,
+              expense: formatarParaDecimal(expenseValues[index])
+            }
+            await saveParticipants(data)
+          })
+        }
+      } catch (error) {
+        console.log(error)
       }
-
     }
-
   };
 
   const formatCurrency = (value: string) => {
@@ -73,6 +77,15 @@ export default function NewExpense() {
     const formattedValue = parseFloat(value.replace(/[^0-9,-]/g, '').replace(',', '.')) || 0;
     return formattedValue.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
   };
+
+  const formatarParaDecimal = (valorMonetario: string) => {
+    // Remove o "R$" e substitui as vírgulas por pontos
+    const valorSemSimbolo = valorMonetario.replace(/[^\d,]/g, '').replace(',', '.');
+    // Converte para número decimal
+    const valorDecimal = parseFloat(valorSemSimbolo);
+
+    return valorDecimal;
+  }
 
   const handleBlur = (index: number) => {
     // Formata o valor quando o campo perde o foco (quando o usuário pressiona 'Tab').
