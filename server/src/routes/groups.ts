@@ -149,13 +149,13 @@ export async function groupsRoutes(app: FastifyInstance): Promise<void> {
       id: z.string().uuid(),
     });
 
-    const bodySchema = z.object({
+    const querySchema = z.object({
       userId: z.string(),
     });
 
     try {
       const { id } = paramsSchema.parse(request.params);
-      const { userId } = bodySchema.parse(request.body);
+      const { userId } = querySchema.parse(request.query);
 
       let group = await prisma.group.findUnique({
         where: {

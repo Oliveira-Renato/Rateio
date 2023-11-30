@@ -1,5 +1,6 @@
 'use client'
 import axios from "axios"
+import Link from "next/link";
 import { useSession } from "next-auth/react";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -41,6 +42,11 @@ export default function Division() {
 
   return (
     <div className="px-10 py-20">
+      <div className="absolute top-10 right-30 hover:text-gray-200" >
+        <Link href={'/'}>
+          ⬅  Pagina Inicial
+        </Link>
+      </div>
       <h2 className="text-3xl font-bold mb-2 text-center">Divisão de despesas</h2>
       <h5 className="text-sm text-center mb-8">Não se preocupe, agora o resto é conosco 😤 </h5>
 
