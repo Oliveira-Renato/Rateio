@@ -170,15 +170,6 @@ export async function groupsRoutes(app: FastifyInstance): Promise<void> {
         return handleErrors(reply, HttpStatus.Unauthorized, 'Não autorizado ou grupo não existe');
       }
 
-      // Exclua as despesas associadas aos participantes do grupo
-      for (const participant of group.participants) {
-        await prisma.expense.deleteMany({
-          where: {
-            participantId: participant.id,
-          },
-        });
-      }
-
       // Exclua os participantes do grupo
       await prisma.participant.deleteMany({
         where: {
