@@ -1,9 +1,10 @@
 'use client'
 import { useRouter } from 'next/navigation';
 import { useGlobalContext } from '@/app/context/store';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
 import axios from 'axios';
+import Spinner from '@/components/Spinner';
 
 interface PropsGroup {
   userId: string,
@@ -42,11 +43,18 @@ export default function NewExpense() {
   const { data: session } = useSession();
   const { name: groupName, participants } = useGlobalContext();
   const [expenseValues, setExpenseValues] = useState(participants.map(() => ''));
+  const [spinner, setSpinner] = useState(false)
+
+  useEffect(() => {
+
+  }, [spinner])
 
   const handleVoltar = () => router.push('/new/participants');
 
   const handleSalvar = async () => {
-    if (session) {
+    if (session && groupName !== "") {
+      setSpinner(true)
+
       const groupData = {
         userId: session.googleId ?? '',
         name: groupName
@@ -66,7 +74,9 @@ export default function NewExpense() {
             await saveParticipants(data)
           })
         }
+        router.push(`/new/division?group=${groupResponse.id}`)
       } catch (error) {
+        setSpinner(false)
         console.log(error)
       }
     }
@@ -94,6 +104,19 @@ export default function NewExpense() {
     updatedValues[index] = formattedValue;
     setExpenseValues(updatedValues);
   };
+
+  if (spinner) {
+    return (
+      <div className="px-10 py-20">
+        <h2 className="text-3xl font-bold mb-2 text-center">Adicionar Despesas</h2>
+        <h5 className="text-sm text-center mb-8">Preencha os gastos de cada integrante</h5>
+
+        <div className="flex flex-col items-center justify-center">
+          <Spinner />
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="px-10 py-20">
