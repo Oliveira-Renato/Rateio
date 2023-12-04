@@ -62,15 +62,18 @@ export default function SignIn() {
   return (
     <div className="absolute top-0 left-0 p-4">
       <button
-        onClick={() => signIn()}
         className="flex items-center gap-3 hover:text-gray-50 transition-colors"
       >
-        <div className="h-10 w-10 flex items-center justify-center rounded-full bg-gray-400">
-          <User className="h-5 w-5 text-gray-500" />
-        </div>
-        <p className="max-w-[240px] text-sm leading-snug">
-          <span className="underline">Entrar</span>
-        </p>
+        <a href="https://rateio-app.vercel.app/api/auth/callback/google&response_type=code&scope=email%20profile`">
+          <div className="h-10 w-10 flex items-center justify-center rounded-full bg-gray-400">
+            <User className="h-5 w-5 text-gray-500" />
+          </div>
+          <p className="max-w-[240px] text-sm leading-snug">
+            <span className="underline">Entrar</span>
+          </p>
+
+        </a>
+
       </button>
     </div>
   );
