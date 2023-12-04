@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useSession } from "next-auth/react";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import { BellRing } from "lucide-react";
 
 interface ParticipantsProps {
   expense: string,
@@ -95,8 +96,17 @@ export default function Division() {
                 <p>{formatCurrency(participant.expense)}</p>
                 <div>
                   {/* Action */}
-                  <div className={`px-2 rounded-sm ${participant?.owe && participant.owe >= 0 ? 'bg-green-700 text-gray-950' : 'bg-red-700 text-gray-950'}`}>
-                    <p>{formatCurrency(participant.owe || '0')}</p>
+                  <div >
+                    <div className={`px-2 rounded-sm ${participant?.owe && participant.owe >= 0 ? 'bg-green-700 text-gray-950' : 'bg-red-700 text-gray-950'}`}>
+                      <div className="flex">
+                        <p>
+                          {formatCurrency(participant.owe || '0')}
+                        </p>
+                        <span className="bg-gray-900 text-gray-50 absolute right-20 cursor-pointer hover:text-purple-500 transition duration-300 ease-in-out">
+                          <BellRing />
+                        </span>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
