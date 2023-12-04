@@ -4,10 +4,6 @@
 
 Rateio is an expense-sharing application developed as part of my first Full Stack Development MBA. It helps users organize and split expenses with ease.
 
-## Key Features
-
-- [List your project's main features or functionalities.]
-
 ## Technologies Used
 
 - **Frontend:**
@@ -25,34 +21,27 @@ Rateio is an expense-sharing application developed as part of my first Full Stac
 
 ## Prerequisites
 
-- [Include any software or configurations needed to run the project.]
+- node.js, next.js 13 +
 
 ## How to Install and Run
 
-1. [Instructions for cloning the repository.]
-2. [Instructions for installing dependencies.]
-3. [Instructions for starting the application.]
+1. cd server/ npm run dev
+2. cd rateio-app/ npm run dev
+
+### Good to go 🚀
 
 ## Folder Structure
 
-- [Explain the organization of the project's folder structure.]
-
-## Contribution
-
-- [Guidelines for contributing, if applicable.]
+- RATEIO
+  -server/back-end
+  -rateio-app/front-end
 
 ## Author
 
 - Renato Oliveira
 
-## License
+## :scroll: Lincense
 
-- [Specify the project's license.]
-
-## Screenshots (Optional)
-
-- [Include screenshots or GIFs of your project, if applicable.]
+This project is under the MIT license.
 
 ## Useful Links
-
-- [Add relevant links, such as documentation, production site, etc.]
