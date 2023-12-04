@@ -67,13 +67,11 @@ export default function Division() {
     return formattedValue.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
   };
 
-  console.log(participants)
-
   return (
     <div className="px-10 py-20">
-      <div className="absolute top-10 right-30 hover:text-gray-200" >
+      <div className="absolute top-10 right-30 hover:text-gray-200">
         <Link href={'/'}>
-          ⬅  Pagina Inicial
+          ⬅ Pagina Inicial
         </Link>
       </div>
       <h2 className="text-3xl font-bold mb-2 text-center">Divisão de despesas</h2>
@@ -84,28 +82,26 @@ export default function Division() {
 
         <div className="mb-2 border-b-2 border-b-purple-500">
           <div className="flex justify-between">
-            <p>Participante</p>
-            <p>Gastou</p>
-            <p>Ação</p>
+            <p className="w-1/3">Participante</p>
+            <p className="w-1/3">Gastou</p>
+            <p className="w-1/3 text-center">Ação</p>
           </div>
 
           {participants.map((participant, index) => (
             <div key={index} className="mb-2 border-b-2 border-b-orange-500">
               <div className="flex justify-between items-end">
-                <p>{participant.name}</p>
-                <p>{formatCurrency(participant.expense)}</p>
-                <div>
+                <p className="w-1/3">{participant.name}</p>
+                <p className="w-1/3">{formatCurrency(participant.expense)}</p>
+                <div className="w-1/3">
                   {/* Action */}
-                  <div >
-                    <div className={`px-2 rounded-sm ${participant?.owe && participant.owe >= 0 ? 'bg-green-700 text-gray-950' : 'bg-red-700 text-gray-950'}`}>
-                      <div className="flex">
-                        <p>
-                          {formatCurrency(participant.owe || '0')}
-                        </p>
-                        <span className="bg-gray-900 text-gray-50 absolute right-20 cursor-pointer hover:text-purple-500 transition duration-300 ease-in-out">
-                          <BellRing />
-                        </span>
-                      </div>
+                  <div className={`rounded-sm ${participant?.owe && participant.owe >= 0 ? 'bg-green-700 text-gray-950' : 'bg-red-700 text-gray-950'}`}>
+                    <div className="flex items-center justify-between">
+                      <p>
+                        {formatCurrency(participant.owe || '0')}
+                      </p>
+                      <span className="bg-gray-900 text-gray-50 px-2 cursor-pointer hover:text-purple-500 transition duration-300 ease-in-out">
+                        <BellRing />
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -113,14 +109,15 @@ export default function Division() {
             </div>
           ))}
 
-          <div className="flex justify-between items-end" >
-            <p>Total </p>
-            <span>{formatCurrency("" + totalExpense + "")}</span>
+          <div className="flex justify-between items-end">
+            <p className="w-1/3">Total </p>
+            <span className="w-1/3">{formatCurrency("" + totalExpense + "")}</span>
           </div>
 
         </div>
 
       </div>
-    </div >
-  )
+    </div>
+  );
+
 }
