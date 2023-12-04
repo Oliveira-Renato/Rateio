@@ -97,6 +97,7 @@ export default function Division() {
                   <div className={`rounded-sm ${participant?.owe && participant.owe >= 0 ? 'bg-green-700 text-gray-950' : 'bg-red-700 text-gray-950'}`}>
                     <div className="flex items-center justify-between">
                       <p>
+                        {/* type 'number | "0"' is not assignable to parameter of type 'string' - TO FIX*/}
                         {formatCurrency(participant.owe || '0')}
                       </p>
                       <span className="bg-gray-900 text-gray-50 px-2 cursor-pointer hover:text-purple-500 transition duration-300 ease-in-out">

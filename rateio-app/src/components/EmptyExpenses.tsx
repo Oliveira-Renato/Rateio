@@ -70,20 +70,20 @@ export default function EmptyExpenses() {
     return (
       <div>
         {groupName.map((group, index) => (
-          <div key={index} className="bg-gray-50 shadow-md p-4 mb-4 rounded-md">
-            <h5 className="text-lg font-semibold mb-2 text-gray-950">{group.name}</h5>
+          <div key={index} className="bg-gray-50 shadow-lg p-6 mb-6 rounded-md">
+            <h5 className="text-xl font-semibold mb-4 text-gray-700">{group.name}</h5>
             <div className="flex justify-between items-center">
               <button
                 type="button"
                 onClick={() => handleDelete(group.id)}
-                className="text-orange-500 hover:text-orange-700 mr-2 transition duration-300 ease-in-out"
+                className="text-red-500 hover:text-red-700 mr-2 transition duration-300 ease-in-out"
               >
                 Deletar
               </button>
               <button
                 type="button"
                 onClick={() => handleView(group.id)}
-                className="text-purple-500 hover:text-purple-700 transition duration-300 ease-in-out"
+                className="text-purple-500 font-bold hover:text-purple-700 transition duration-300 ease-in-out"
               >
                 Visualizar
               </button>
@@ -91,7 +91,7 @@ export default function EmptyExpenses() {
           </div>
         ))}
       </div>
-    )
+    );
   }
 
 
