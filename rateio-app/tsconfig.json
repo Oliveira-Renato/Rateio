@@ -33,7 +33,7 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "src/components/spinner.js"
+    "src/components/Spinner.tsx"
   ],
   "exclude": [
     "node_modules"
