@@ -33,7 +33,7 @@ export default function Division() {
             setGroupName(data.name);
 
             // Calcula o valor total de despesas
-            const totalExpenses = data.participants.reduce((acc, participant) => {
+            const totalExpenses = data.participants.reduce((acc: number, participant: ParticipantsProps) => {
               const expenseValue = parseFloat(participant.expense) || 0;
               return acc + expenseValue;
             }, 0);
@@ -42,7 +42,7 @@ export default function Division() {
             const individualShare = totalExpenses / data.participants.length;
 
             // Calcula quanto cada participante deve receber ou pagar
-            const updatedParticipants = data.participants.map((participant) => {
+            const updatedParticipants = data.participants.map((participant: ParticipantsProps) => {
               const amountOwed = parseFloat(participant.expense) - individualShare;
               return { ...participant, owe: amountOwed };
             });
