@@ -3,8 +3,6 @@ import NextAuth from "next-auth";
 
 const { GOOGLE_CLIENT_ID = '', GOOGLE_CLIENT_SECRET = '' } = process.env;
 
-
-
 const handler = NextAuth({
   providers: [
     GoogleProvider({
@@ -14,7 +12,6 @@ const handler = NextAuth({
   ],
   callbacks: {
     async signIn({ user, account, profile, email, credentials }: any) {
-      //console.log("GoogleProvider signIn callback:", profile, account);
       return true
     },
     async redirect({ url, baseUrl }) {
@@ -31,11 +28,8 @@ const handler = NextAuth({
       }
     },
     async jwt({ token, account }: any) {
-      console.log("Callback JWT foi chamado.");
       try {
-        console.log("antes", token);
         if (account) {
-          console.log("depois");
           token.accessToken = account.access_token;
           token.id_token = account.id_token;
           token.provider = account.provider;

@@ -64,7 +64,7 @@ export default function SignIn() {
       <button
         className="flex items-center gap-3 hover:text-gray-50 transition-colors"
       >
-        <a href="https://rateio-app.vercel.app/api/auth/callback/google&response_type=code&scope=email%20profile`">
+        <a href={`https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.GOOGLE_CLIENT_ID}&redirect_uri=http://localhost:3000/api/auth/callback/google&response_type=code&scope=email%20profile`} >
           <div className="h-10 w-10 flex items-center justify-center rounded-full bg-gray-400">
             <User className="h-5 w-5 text-gray-500" />
           </div>
