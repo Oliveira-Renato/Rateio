@@ -17,6 +17,12 @@ export default function EmptyExpenses() {
   const { data: session } = useSession();
   const router = useRouter();
 
+  const handleLink = () => {
+    if (!session) {
+      alert('Faça login antes de adicionar alguma despesa. 🧐 ')
+    }
+  }
+
   useEffect(() => {
     setTimeout(() => {
       setSpinner(false)
@@ -99,7 +105,14 @@ export default function EmptyExpenses() {
     <div className="flex flex-1 items-center justify-center">
       <p className="text-center leading-relaxed w-[360px]">
         No momento, não há divisões registradas. Comece a{' '}
-        <Link className="underline hover:text-gray-50 transition-all" href="/new/group">adicionar despesas</Link> para iniciar a divisão com seus amigos.
+        <Link className="underline hover:text-gray-50 transition-all"
+          onClick={handleLink}
+          href={session ? "/new/group" : "/"}
+        >
+          dicionar despesas
+        </Link>
+        {' '}
+        para iniciar a divisão com seus amigos.
       </p>
     </div>
   )
