@@ -1,7 +1,7 @@
 import GoogleProvider from "next-auth/providers/google";
 import NextAuth from "next-auth";
 
-const { GOOGLE_CLIENT_ID = '', GOOGLE_CLIENT_SECRET = '' } = process.env;
+const { GOOGLE_CLIENT_ID = '', GOOGLE_CLIENT_SECRET = '', NEXTAUTH_SECRET = '' } = process.env;
 
 const handler = NextAuth({
   providers: [
@@ -42,7 +42,8 @@ const handler = NextAuth({
         throw error; // Re-throw the error to stop the authentication process
       }
     }
-  }
+  },
+  secret: NEXTAUTH_SECRET,
 });
 
 export { handler as GET, handler as POST };
