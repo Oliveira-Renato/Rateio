@@ -3,25 +3,42 @@ import axios from "axios";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Spinner from "./Spinner";
+import Snackbar, { SnackbarOrigin } from '@mui/material/Snackbar';
+import { Stack } from "@mui/material";
 
 interface GroupProps {
   id: string,
   name: string
 }
 
+interface State extends SnackbarOrigin {
+  open: boolean;
+}
+
+
 export default function EmptyExpenses() {
   const [groupName, setGroupName] = useState<GroupProps[]>([])
   const [spinner, setSpinner] = useState(false)
+  const [state, setState] = React.useState<State>({
+    open: false,
+    vertical: 'top',
+    horizontal: 'center',
+  });
+  const { vertical, horizontal, open } = state;
   const { data: session } = useSession();
+
+
   const router = useRouter();
 
-  const handleLink = () => {
-    if (!session) {
-      alert('Faça login antes de adicionar alguma despesa. 🧐 ')
-    }
-  }
+  const handleClick = (newState: SnackbarOrigin) => () => {
+    setState({ ...newState, open: true });
+  };
+
+  const handleClose = () => {
+    setState({ ...state, open: false })
+  };
 
   useEffect(() => {
     setTimeout(() => {
@@ -102,18 +119,28 @@ export default function EmptyExpenses() {
 
 
   return (
+
     <div className="flex flex-1 items-center justify-center">
       <p className="text-center leading-relaxed w-[360px]">
         No momento, não há divisões registradas. Comece a{' '}
         <Link className="underline hover:text-gray-50 transition-all"
-          onClick={handleLink}
+          onClick={handleClick({ vertical: 'top', horizontal: 'center' })}
           href={session ? "/new/group" : "/"}
         >
-          dicionar despesas
+          adicionar despesas
         </Link>
         {' '}
         para iniciar a divisão com seus amigos.
       </p>
+      <Stack>
+        <Snackbar
+          anchorOrigin={{ vertical, horizontal }}
+          open={open}
+          onClose={handleClose}
+          message={`(❕)  Faça login para adicionar despesas`}
+          key={vertical + horizontal}
+        />
+      </Stack>
     </div>
   )
 
