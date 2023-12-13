@@ -93,13 +93,13 @@ export default function EmptyExpenses() {
     return (
       <div>
         {groupName.map((group, index) => (
-          <div key={index} className="bg-gray-50 shadow-lg p-6 mb-6 rounded-md">
-            <h5 className="text-xl font-semibold mb-4 text-gray-700">{group.name}</h5>
+          <div key={index} className="bg-zinc-900 shadow-lg p-6 mb-6 rounded-md">
+            <h5 className="text-xl font-semibold mb-4 text-gray-50">{group.name}</h5>
             <div className="flex justify-between items-center">
               <button
                 type="button"
                 onClick={() => handleDelete(group.id)}
-                className="text-red-500 hover:text-red-700 mr-2 transition duration-300 ease-in-out"
+                className="text-orange-500 hover:text-orange-600 font-bold mr-2 transition duration-300 ease-in-out"
               >
                 Deletar
               </button>
@@ -119,7 +119,6 @@ export default function EmptyExpenses() {
 
 
   return (
-
     <div className="flex flex-1 items-center justify-center">
       <p className="text-center leading-relaxed w-[360px]">
         No momento, não há divisões registradas. Comece a{' '}

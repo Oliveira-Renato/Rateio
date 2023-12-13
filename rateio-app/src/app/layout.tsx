@@ -22,9 +22,9 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${roboto.variable} font-sans bg-gray-900 text-gray-100`}>
         <Providers>
-          <main className="grid grid-cols-2 min-h-screen">
+          <main className="flex flex-wrap md:grid md:grid-cols-2 min-h-screen">
             {/* left */}
-            <div className="flex flex-col items-start justify-between px-28 py-16 relative overflow-hidden border-r border-white/10 bg-[url(../assets/bg-stars.svg)] bg-cover">
+            <div className="flex flex-col items-start justify-between px-14 md:px-28 py-16 relative overflow-hidden border-r border-white/10 bg-[url(../assets/bg-stars.svg)] bg-cover">
               {/* blur  */}
               <div className="absolute right-0 top-1/2 h-[288px] w-[526px] rounded-full blur-full -translate-y-1/2 translate-x-1/2 bg-purple-700 opacity-50" />
 
@@ -40,7 +40,7 @@ export default function RootLayout({
             </div>
 
             {/* right */}
-            <div className="flex flex-col p-16 bg-[url(../assets/bg-stars.svg)] bg-cover">
+            <div className="flex flex-col p-16 bg-[url(../assets/bg-stars.svg)] bg-cover w-full">
               <GlobalContextProvider>
 
                 {children}
