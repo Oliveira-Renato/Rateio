@@ -27,7 +27,7 @@ export default function NewParticpants() {
   }
 
   return (
-    <div className="px-10 py-20">
+    <div className="md:px-10 py-20">
       <h2 className="text-3xl font-bold mb-2 text-center">Adicionar participants</h2>
       <h5 className="text-sm text-center mb-8">Adicione uma ou mais pessoas que deseja dividir as despesas</h5>
       <div className="flex flex-col items-center justify-center">
