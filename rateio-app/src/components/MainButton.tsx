@@ -1,24 +1,39 @@
 'use client'
-import { useSession } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
+import { useRouter } from 'next/navigation';
+import { useRef } from 'react';
 
 export default function MainButton() {
+  const scrollRef = useRef(null);
   const { data: session } = useSession();
+  const router = useRouter();
 
   if (!session) {
     return (
       <>
-        <a href={`https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.GOOGLE_CLIENT_ID}&redirect_uri=https://rateio-app.vercel.app/api/auth/callback/google&response_type=code&scope=email%20profile`} className='bg-orange-500 text-white px-6 py-3 rounded hover:bg-orange-700 transition duration-300 ease-in-out'>
+        <button
+          onClick={() => signIn()}
+          className='bg-orange-500 text-white px-6 py-3 rounded hover:bg-orange-700 transition duration-300 ease-in-out'>
           Comece Agora
-        </a>
+        </button>
       </>
     )
   }
 
   return (
     <div>
-      <a href="/new/group" className='bg-orange-500 text-white px-6 py-3 rounded hover:bg-orange-700 transition duration-300 ease-in-out'>
+      <button
+        onClick={(e) => {
+          e.preventDefault();
+          router.push('/new/group'); // Substitua 'sua-nova-rota' pela rota desejada
+          if (scrollRef.current !== null) {
+            scrollRef.current.scrollIntoView({ behavior: 'smooth' });
+          }
+        }}
+        ref={scrollRef}
+      >
         Criar Nova Despesa
-      </a>
+      </button>
     </div>
   )
 }

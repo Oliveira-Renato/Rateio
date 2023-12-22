@@ -68,8 +68,8 @@ export default function Division() {
   };
 
   return (
-    <div className="md:px-10 py-20">
-      <div className="absolute top-10 right-30 hover:text-gray-200">
+    <div className="relative sm:mt-40 sm:mx-10 md:px-10 md:mt-0 md:mx-0 py-20 sm:h-screen">
+      <div className="absolute sm:top-0  top-10 right-30 hover:text-gray-200">
         <Link href={'/'}>
           ⬅ Pagina Inicial
         </Link>

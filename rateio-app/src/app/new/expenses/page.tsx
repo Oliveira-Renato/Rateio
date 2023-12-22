@@ -107,7 +107,7 @@ export default function NewExpense() {
 
   if (spinner) {
     return (
-      <div className="md:px-10 py-20">
+      <div className="md:px-10 py-20 sm:h-screen sm:my-10 sm:mx-5 md:h-full md:my-0 md:mx-0">
         <h2 className="text-3xl font-bold mb-2 text-center">Adicionar Despesas</h2>
         <h5 className="text-sm text-center mb-8">Preencha os gastos de cada integrante</h5>
 
@@ -119,7 +119,7 @@ export default function NewExpense() {
   }
 
   return (
-    <div className="md:px-10 py-20">
+    <div className="md:px-10 py-20 sm:h-screen sm:my-10 sm:mx-5 md:h-full md:my-0 md:mx-0">
       <h2 className="text-3xl font-bold mb-2 text-center">Adicionar Despesas</h2>
       <h5 className="text-sm text-center mb-8">Preencha os gastos de cada integrante</h5>
       <div className="flex flex-col items-center justify-center">

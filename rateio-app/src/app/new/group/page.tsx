@@ -11,7 +11,7 @@ export default function NewGroup() {
   const handleCancelar = () => router.push('/');
 
   return (
-    <div className="md:px-10 py-20">
+    <div className="md:px-10 py-20 sm:h-screen sm:my-10 sm:mx-5 md:h-full md:my-0 md:mx-0">
       <h2 className="text-4xl font-bold mb-12 text-center">Nova Despesa</h2>
       <div className="flex flex-col items-center justify-center">
         <form className="w-full">

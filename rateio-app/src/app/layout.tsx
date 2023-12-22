@@ -40,7 +40,7 @@ export default function RootLayout({
             </div>
 
             {/* right */}
-            <div className="flex flex-col p-16 bg-[url(../assets/bg-stars.svg)] bg-cover w-full">
+            <div className="flex flex-col md:p-16 bg-[url(../assets/bg-stars.svg)] bg-cover w-full">
               <GlobalContextProvider>
 
                 {children}

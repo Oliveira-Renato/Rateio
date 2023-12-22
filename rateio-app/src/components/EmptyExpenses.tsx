@@ -91,7 +91,8 @@ export default function EmptyExpenses() {
 
   if (groupName.length > 0) {
     return (
-      <div>
+      <div className="sm:h-screen sm:my-10 sm:mx-5 md:h-full md:my-0 md:mx-0">
+        <h2 className="text-3xl font-bold mb-2 text-center mt-16 mb-8">Minhas Despesas</h2>
         {groupName.map((group, index) => (
           <div key={index} className="bg-zinc-900 shadow-lg p-6 mb-6 rounded-md">
             <h5 className="text-xl font-semibold mb-4 text-gray-50">{group.name}</h5>
