@@ -17,7 +17,7 @@ app.register(groupsRoutes);
 app.register(participantsRoutes);
 app.register(registerUser);
 
-export const handler: Handler = async (event, context) => {
+export const handler = async (event, context) => {
   await app.ready();
   const result = await app.inject({
     method: event.httpMethod,
