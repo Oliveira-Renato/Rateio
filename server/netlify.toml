@@ -1,8 +1,2 @@
 [build]
-  command = "npm run build"
-  functions = "server/src"  # Diretório das funções Netlify
-
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
+  functions = "functions"  # Diretório das funções Netlify

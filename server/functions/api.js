@@ -1,5 +1,6 @@
 import fastify from 'fastify';
 import cors from '@fastify/cors'
+import serverless from 'serverless-http'
 import { userRoutes } from './src/routes/users';
 import { groupsRoutes } from './src/routes/groups'
 import { participantsRoutes } from './src/routes/participants'
@@ -16,19 +17,4 @@ app.register(groupsRoutes);
 app.register(participantsRoutes);
 app.register(registerUser);
 
-export const handler = async (event, context) => {
-  await app.ready();
-  const result = await app.inject({
-    method: event.httpMethod,
-    url: event.path,
-    query: event.queryStringParameters,
-    headers: event.headers,
-    payload: event.body,
-  });
-
-  return {
-    statusCode: result.statusCode,
-    headers: result.headers,
-    body: result.payload,
-  };
-};
+export const handler = serverless(app);
