@@ -1,0 +1,9 @@
+[build]
+  functions = "server/src" # Diretório onde estão suas funções
+
+[functions]
+  node_bundler = "esbuild" # Usa esbuild para empacotamento, suportando TypeScript
+
+[dev]
+  command = "npm run dev" # Comando para iniciar seu servidor localmente durante o desenvolvimento
+  targetPort = 3333       # Porta que seu servidor usa localmente
