@@ -1,7 +1,7 @@
 # example netlify.toml
 [build]
   command = "npm run build"
-  functions = "C:\Users\renat\Documents\projects\Rateio\server\server\src"
+  functions = "server/src"
   publish = "server"
 
   ## Uncomment to use this redirect for Single Page Applications like create-react-app.
