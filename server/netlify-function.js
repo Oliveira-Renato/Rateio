@@ -1,4 +1,3 @@
-import { Handler } from '@netlify/functions';
 import fastify from 'fastify';
 import cors from '@fastify/cors'
 import { userRoutes } from './src/routes/users';
