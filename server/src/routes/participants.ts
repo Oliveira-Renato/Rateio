@@ -1,14 +1,15 @@
-import { FastifyInstance } from 'fastify'
-import { z } from 'zod'
-import { prisma } from '../lib/prisma'
+import { FastifyInstance } from "fastify";
+import { z } from "zod";
+import { prisma } from "../lib/prisma";
 
 export async function participantsRoutes(app: FastifyInstance) {
-  app.get('/participants', async (request, reply) => {
+  app.get("/participants", async (request, reply) => {
     const groupSchema = z.object({
       userId: z.string(),
     });
 
     try {
+      console.log("Request Query:", request.query); // Log para depuração
       const { userId } = groupSchema.parse(request.query);
 
       if (!userId) {
@@ -18,13 +19,12 @@ export async function participantsRoutes(app: FastifyInstance) {
       const participants = await prisma.participant.findMany();
       return participants;
     } catch (error) {
-      console.error('Error parsing request body:', error);
-      return reply.status(400).send('Bad Request'); // Bad Request if parsing fails
+      console.error("Error parsing request body:", error);
+      return reply.status(400).send("Bad Request"); // Bad Request if parsing fails
     }
   });
 
-
-  app.get('/participants/:id', async (request, reply) => {
+  app.get("/participants/:id", async (request, reply) => {
     const paramsSchema = z.object({
       id: z.string().uuid(),
     });
@@ -32,7 +32,6 @@ export async function participantsRoutes(app: FastifyInstance) {
     const querySchema = z.object({
       userId: z.string(),
     });
-
 
     try {
       const { id } = paramsSchema.parse(request.params);
@@ -43,18 +42,19 @@ export async function participantsRoutes(app: FastifyInstance) {
       });
 
       if (!participant || participant.userId !== userId) {
-        return reply.status(401).send('Não autorizado ou não existe tal grupo! 😞 ');
+        return reply
+          .status(401)
+          .send("Não autorizado ou não existe tal grupo! 😞 ");
       }
 
       return participant;
     } catch (error) {
-      console.error('Error processing request:', error);
-      return reply.status(400).send('Bad Request');
+      console.error("Error processing request:", error);
+      return reply.status(400).send("Bad Request");
     }
   });
 
-
-  app.post('/participants', async (request, reply) => {
+  app.post("/participants", async (request, reply) => {
     const bodySchema = z.object({
       name: z.string(),
       groupId: z.string().uuid(),
@@ -72,7 +72,7 @@ export async function participantsRoutes(app: FastifyInstance) {
       });
 
       if (!user) {
-        return reply.status(401).send('Usuário inválido ou não autenticado 😠');
+        return reply.status(401).send("Usuário inválido ou não autenticado 😠");
       }
 
       const participant = await prisma.participant.create({
@@ -80,19 +80,18 @@ export async function participantsRoutes(app: FastifyInstance) {
           name,
           userId,
           groupId,
-          expense
+          expense,
         },
       });
 
       return participant;
     } catch (error) {
-      console.error('Error processing request:', error);
-      return reply.status(500).send('Erro interno do servidor');
+      console.error("Error processing request:", error);
+      return reply.status(500).send("Erro interno do servidor");
     }
   });
 
-
-  app.put('/participants/:id', async (request, reply) => {
+  app.put("/participants/:id", async (request, reply) => {
     const paramsSchema = z.object({
       id: z.string().uuid(),
     });
@@ -103,7 +102,7 @@ export async function participantsRoutes(app: FastifyInstance) {
 
     const bodySchema = z.object({
       name: z.string(),
-      expense: z.number()
+      expense: z.number(),
     });
 
     try {
@@ -115,11 +114,13 @@ export async function participantsRoutes(app: FastifyInstance) {
       let participant = await prisma.participant.findUnique({
         where: {
           id,
-        }
+        },
       });
 
       if (!participant || participant.userId !== userId) {
-        return reply.status(401).send('Não autorizado ou não existe tal grupo! 😞');
+        return reply
+          .status(401)
+          .send("Não autorizado ou não existe tal grupo! 😞");
       }
 
       participant = await prisma.participant.update({
@@ -128,19 +129,18 @@ export async function participantsRoutes(app: FastifyInstance) {
         },
         data: {
           name,
-          expense
+          expense,
         },
-      })
+      });
 
       return participant;
     } catch (error) {
-      console.error('Error processing request:', error);
-      return reply.status(500).send('Erro interno do servidor');
+      console.error("Error processing request:", error);
+      return reply.status(500).send("Erro interno do servidor");
     }
   });
 
-
-  app.delete('/participants/:id', async (request, reply) => {
+  app.delete("/participants/:id", async (request, reply) => {
     const paramsSchema = z.object({
       id: z.string().uuid(),
     });
@@ -156,23 +156,23 @@ export async function participantsRoutes(app: FastifyInstance) {
       let participant = await prisma.participant.findUnique({
         where: {
           id,
-        }
+        },
       });
 
       if (!participant || participant.userId !== userId) {
-        return reply.status(401).send('Não autorizado ou não existe tal grupo! 😞');
+        return reply
+          .status(401)
+          .send("Não autorizado ou não existe tal grupo! 😞");
       }
-
 
       await prisma.participant.delete({
         where: {
           id,
         },
-      })
-
+      });
     } catch (error) {
-      console.error('Error processing request:', error);
-      return reply.status(500).send('Erro interno do servidor');
+      console.error("Error processing request:", error);
+      return reply.status(500).send("Erro interno do servidor");
     }
   });
 }

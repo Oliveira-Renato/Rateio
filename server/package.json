@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "netlify dev",
-    "build": "tsc"
+    "build": "netlify deploy --prod"
   },
   "author": "Oliveira Renato",
   "license": "ISC",
@@ -21,6 +21,7 @@
     "@netlify/functions": "^2.8.0",
     "@prisma/client": "^5.5.1",
     "axios": "^1.6.0",
+    "express": "^4.19.2",
     "fastify": "^4.24.3",
     "fastify-oauth2": "^4.6.0",
     "firebase-admin": "^11.11.0",

@@ -1,14 +1,15 @@
-import { FastifyInstance } from 'fastify'
-import { z } from 'zod'
-import { prisma } from '../lib/prisma'
+import { FastifyInstance } from "fastify";
+import { z } from "zod";
+import { prisma } from "../lib/prisma";
 
 export async function userRoutes(app: FastifyInstance) {
-  app.get('/user', async (request, reply) => {
+  app.get("/user", async (request, reply) => {
     const groupSchema = z.object({
-      userId: z.string(),
+      userId: z.string().optional(),
     });
 
     try {
+      console.log("Request Query:", request.query); // Log para depuração
       const { userId } = groupSchema.parse(request.query);
 
       if (!userId) {
@@ -18,12 +19,12 @@ export async function userRoutes(app: FastifyInstance) {
       const users = await prisma.user.findMany();
       return users;
     } catch (error) {
-      console.error('Error parsing request body:', error);
-      return reply.status(400).send('Bad Request'); // Bad Request if parsing fails
+      console.error("Error parsing request body AQUI:", error);
+      return reply.status(400).send("Bad Request teste"); // Bad Request if parsing fails
     }
   });
 
-  app.get('/user/:id', async (request, reply) => {
+  app.get("/user/:id", async (request, reply) => {
     const paramsSchema = z.object({
       id: z.string(),
     });
@@ -36,21 +37,22 @@ export async function userRoutes(app: FastifyInstance) {
         include: {
           groups: {
             include: {
-              participants: true
-            }
-          }
-        }
+              participants: true,
+            },
+          },
+        },
       });
 
       if (!user) {
-        return reply.status(401).send('Não autorizado ou não existe tal usuario! 😞 ');
+        return reply
+          .status(401)
+          .send("Não autorizado ou não existe tal usuario! 😞 ");
       }
 
       return user;
-
     } catch (error) {
-      console.error('Error processing request:', error);
-      return reply.status(400).send('Bad Request');
+      console.error("Error processing request BOLACHA:", error);
+      return reply.status(400).send("Bad Request 2");
     }
   });
 }
