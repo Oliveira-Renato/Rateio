@@ -1,34 +1,32 @@
-'use client'
+"use client";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import Spinner from "./Spinner";
-import Snackbar, { SnackbarOrigin } from '@mui/material/Snackbar';
+import Snackbar, { SnackbarOrigin } from "@mui/material/Snackbar";
 import { Stack } from "@mui/material";
 
 interface GroupProps {
-  id: string,
-  name: string
+  id: string;
+  name: string;
 }
 
 interface State extends SnackbarOrigin {
   open: boolean;
 }
 
-
 export default function EmptyExpenses() {
-  const [groupName, setGroupName] = useState<GroupProps[]>([])
-  const [spinner, setSpinner] = useState(false)
+  const [groupName, setGroupName] = useState<GroupProps[]>([]);
+  const [spinner, setSpinner] = useState(false);
   const [state, setState] = React.useState<State>({
     open: false,
-    vertical: 'top',
-    horizontal: 'center',
+    vertical: "top",
+    horizontal: "center",
   });
   const { vertical, horizontal, open } = state;
   const { data: session } = useSession();
-
 
   const router = useRouter();
 
@@ -37,65 +35,78 @@ export default function EmptyExpenses() {
   };
 
   const handleClose = () => {
-    setState({ ...state, open: false })
+    setState({ ...state, open: false });
   };
 
   useEffect(() => {
     setTimeout(() => {
-      setSpinner(false)
-    }, 3000)
+      setSpinner(false);
+    }, 3000);
 
     const getData = async () => {
       if (session) {
         try {
-          const response = await axios.get(`http://localhost:3333/user/${session.googleId}`)
+          const response = await axios.get(
+            `https://rateio-server.netlify.app/.netlify/functions/api/user/${session.googleId}`
+          );
 
           if (response.data) {
-            const { data } = response
-            setGroupName(data.groups)
+            const { data } = response;
+            setGroupName(data.groups);
           }
         } catch (error) {
-          console.log(error)
+          console.log(error);
         }
       }
-    }
-    getData()
-  }, [session?.googleId, spinner])
+    };
+    getData();
+  }, [session?.googleId, spinner]);
 
   const handleDelete = (groupId: string) => {
-    setSpinner(true)
+    setSpinner(true);
     try {
-      axios.delete(`http://localhost:3333/groups/${groupId}?userId=${session?.googleId}`)
+      axios.delete(
+        `http://localhost:3333/groups/${groupId}?userId=${session?.googleId}`
+      );
     } catch (error) {
-      setSpinner(false)
-      console.log(error)
+      setSpinner(false);
+      console.log(error);
     }
   };
 
   const handleView = (groupId: string) => {
     // Lógica para visualizar o grupo com o ID groupId
     console.log(`Visualizar grupo com ID ${groupId}`);
-    router.push(`/new/division?group=${groupId}`)
+    router.push(`/new/division?group=${groupId}`);
   };
 
   if (spinner) {
     return (
       <div className="bg-gray-50 shadow-md p-4 mb-4 rounded-md">
-        <h5 className="text-lg font-semibold mb-2 text-gray-950">Deletando grupo...</h5>
+        <h5 className="text-lg font-semibold mb-2 text-gray-950">
+          Deletando grupo...
+        </h5>
         <div className="flex justify-between items-center">
           <Spinner />
         </div>
       </div>
-    )
+    );
   }
 
   if (groupName.length > 0) {
     return (
       <div className="sm:h-screen sm:my-10 sm:mx-5 md:h-full md:my-0 md:mx-0">
-        <h2 className="text-3xl font-bold mb-2 text-center mt-16 mb-8">Minhas Despesas</h2>
+        <h2 className="text-3xl font-bold mb-2 text-center mt-16 mb-8">
+          Minhas Despesas
+        </h2>
         {groupName.map((group, index) => (
-          <div key={index} className="bg-zinc-900 shadow-lg p-6 mb-6 rounded-md">
-            <h5 className="text-xl font-semibold mb-4 text-gray-50">{group.name}</h5>
+          <div
+            key={index}
+            className="bg-zinc-900 shadow-lg p-6 mb-6 rounded-md"
+          >
+            <h5 className="text-xl font-semibold mb-4 text-gray-50">
+              {group.name}
+            </h5>
             <div className="flex justify-between items-center">
               <button
                 type="button"
@@ -118,18 +129,17 @@ export default function EmptyExpenses() {
     );
   }
 
-
   return (
     <div className="flex flex-1 items-center justify-center">
       <p className="text-center leading-relaxed w-[360px]">
-        No momento, não há divisões registradas. Comece a{' '}
-        <Link className="underline hover:text-gray-50 transition-all"
-          onClick={handleClick({ vertical: 'top', horizontal: 'center' })}
+        No momento, não há divisões registradas. Comece a{" "}
+        <Link
+          className="underline hover:text-gray-50 transition-all"
+          onClick={handleClick({ vertical: "top", horizontal: "center" })}
           href={session ? "/new/group" : "/"}
         >
           adicionar despesas
-        </Link>
-        {' '}
+        </Link>{" "}
         para iniciar a divisão com seus amigos.
       </p>
       <Stack>
@@ -142,6 +152,5 @@ export default function EmptyExpenses() {
         />
       </Stack>
     </div>
-  )
-
+  );
 }

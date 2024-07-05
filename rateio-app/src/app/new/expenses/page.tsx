@@ -1,101 +1,112 @@
-'use client'
-import { useRouter } from 'next/navigation';
-import { useGlobalContext } from '@/app/context/store';
-import React, { useEffect, useState } from 'react';
-import { useSession } from 'next-auth/react';
-import axios from 'axios';
-import Spinner from '@/components/Spinner';
+"use client";
+import { useRouter } from "next/navigation";
+import { useGlobalContext } from "@/app/context/store";
+import React, { useEffect, useState } from "react";
+import { useSession } from "next-auth/react";
+import axios from "axios";
+import Spinner from "@/components/Spinner";
 
 interface PropsGroup {
-  userId: string,
-  name?: string
+  userId: string;
+  name?: string;
 }
 
 interface PropsParticipants {
-  name: string,
-  userId: string,
-  groupId: string,
-  expense: number
+  name: string;
+  userId: string;
+  groupId: string;
+  expense: number;
 }
 
 const saveGroup = async (groupData: PropsGroup) => {
   try {
-    const response = await axios.post('http://localhost:3333/groups', groupData);
-    const { data } = await response
-    return data
+    const response = await axios.post(
+      "https://rateio-server.netlify.app/.netlify/functions/api/groups",
+      groupData
+    );
+    const { data } = await response;
+    return data;
   } catch (error) {
-    console.error('Erro na criação do grupo:', error);
+    console.error("Erro na criação do grupo:", error);
   }
-}
+};
 const saveParticipants = async (participantData: PropsParticipants) => {
   try {
-    const response = await axios.post('http://localhost:3333/participants', participantData);
-    console.log('part', response.data)
-    return response.data
+    const response = await axios.post(
+      "https://rateio-server.netlify.app/.netlify/functions/api/participants",
+      participantData
+    );
+    console.log("part", response.data);
+    return response.data;
   } catch (error) {
-    console.error('Erro na criação do grupo:', error);
+    console.error("Erro na criação do grupo:", error);
   }
-}
-
+};
 
 export default function NewExpense() {
   const router = useRouter();
   const { data: session } = useSession();
   const { name: groupName, participants } = useGlobalContext();
-  const [expenseValues, setExpenseValues] = useState(participants.map(() => ''));
-  const [spinner, setSpinner] = useState(false)
+  const [expenseValues, setExpenseValues] = useState(
+    participants.map(() => "")
+  );
+  const [spinner, setSpinner] = useState(false);
 
-  useEffect(() => {
+  useEffect(() => {}, [spinner]);
 
-  }, [spinner])
-
-  const handleVoltar = () => router.push('/new/participants');
+  const handleVoltar = () => router.push("/new/participants");
 
   const handleSalvar = async () => {
     if (session && groupName !== "") {
-      setSpinner(true)
+      setSpinner(true);
 
       const groupData = {
-        userId: session.googleId ?? '',
-        name: groupName
+        userId: session.googleId ?? "",
+        name: groupName,
       };
 
       try {
-        const groupResponse = await saveGroup(groupData)
+        const groupResponse = await saveGroup(groupData);
 
         if (Object.entries(groupResponse).length) {
           participants.map(async (participant, index) => {
             const data = {
               name: participant,
-              userId: session.googleId ?? '',
+              userId: session.googleId ?? "",
               groupId: groupResponse.id,
-              expense: formatarParaDecimal(expenseValues[index])
-            }
-            await saveParticipants(data)
-          })
+              expense: formatarParaDecimal(expenseValues[index]),
+            };
+            await saveParticipants(data);
+          });
         }
-        router.push(`/new/division?group=${groupResponse.id}`)
+        router.push(`/new/division?group=${groupResponse.id}`);
       } catch (error) {
-        setSpinner(false)
-        console.log(error)
+        setSpinner(false);
+        console.log(error);
       }
     }
   };
 
   const formatCurrency = (value: string) => {
     // Formata o valor para o formato de moeda brasileira (R$ 0,00).
-    const formattedValue = parseFloat(value.replace(/[^0-9,-]/g, '').replace(',', '.')) || 0;
-    return formattedValue.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    const formattedValue =
+      parseFloat(value.replace(/[^0-9,-]/g, "").replace(",", ".")) || 0;
+    return formattedValue.toLocaleString("pt-BR", {
+      style: "currency",
+      currency: "BRL",
+    });
   };
 
   const formatarParaDecimal = (valorMonetario: string) => {
     // Remove o "R$" e substitui as vírgulas por pontos
-    const valorSemSimbolo = valorMonetario.replace(/[^\d,]/g, '').replace(',', '.');
+    const valorSemSimbolo = valorMonetario
+      .replace(/[^\d,]/g, "")
+      .replace(",", ".");
     // Converte para número decimal
     const valorDecimal = parseFloat(valorSemSimbolo);
 
     return valorDecimal;
-  }
+  };
 
   const handleBlur = (index: number) => {
     // Formata o valor quando o campo perde o foco (quando o usuário pressiona 'Tab').
@@ -108,20 +119,28 @@ export default function NewExpense() {
   if (spinner) {
     return (
       <div className="md:px-10 py-20 sm:h-screen sm:my-10 sm:mx-5 md:h-full md:my-0 md:mx-0">
-        <h2 className="text-3xl font-bold mb-2 text-center">Adicionar Despesas</h2>
-        <h5 className="text-sm text-center mb-8">Preencha os gastos de cada integrante</h5>
+        <h2 className="text-3xl font-bold mb-2 text-center">
+          Adicionar Despesas
+        </h2>
+        <h5 className="text-sm text-center mb-8">
+          Preencha os gastos de cada integrante
+        </h5>
 
         <div className="flex flex-col items-center justify-center">
           <Spinner />
         </div>
       </div>
-    )
+    );
   }
 
   return (
     <div className="md:px-10 py-20 sm:h-screen sm:my-10 sm:mx-5 md:h-full md:my-0 md:mx-0">
-      <h2 className="text-3xl font-bold mb-2 text-center">Adicionar Despesas</h2>
-      <h5 className="text-sm text-center mb-8">Preencha os gastos de cada integrante</h5>
+      <h2 className="text-3xl font-bold mb-2 text-center">
+        Adicionar Despesas
+      </h2>
+      <h5 className="text-sm text-center mb-8">
+        Preencha os gastos de cada integrante
+      </h5>
       <div className="flex flex-col items-center justify-center">
         {/* formulario */}
         <form className="w-full">
@@ -135,14 +154,16 @@ export default function NewExpense() {
                     type="text"
                     id={`valueExpense_${index}`}
                     value={expenseValues[index]}
-                    onChange={(e) => setExpenseValues((prevValues) => {
-                      const updatedValues = [...prevValues];
-                      updatedValues[index] = e.target.value;
-                      return updatedValues;
-                    })}
+                    onChange={(e) =>
+                      setExpenseValues((prevValues) => {
+                        const updatedValues = [...prevValues];
+                        updatedValues[index] = e.target.value;
+                        return updatedValues;
+                      })
+                    }
                     onBlur={() => handleBlur(index)}
                     className="w-28 bg-gray-900 text-gray-100 border border-purple-500 py-2 px-4 rounded-md focus:outline-none focus:border-purple-700 bg-transparent transition duration-300 ease-in-out"
-                    placeholder='R$ 0,00'
+                    placeholder="R$ 0,00"
                   />
                 </div>
               </div>
