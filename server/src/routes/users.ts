@@ -13,14 +13,15 @@ export async function userRoutes(app: FastifyInstance) {
       const { userId } = groupSchema.parse(request.query);
 
       if (!userId) {
-        return reply.status(401).send(); // Forbidden
+        return reply.status(401).send("User ID is required"); // Forbidden
       }
 
+      console.log("User ID:", userId); // Log do userId para depuração
       const users = await prisma.user.findMany();
       return users;
     } catch (error) {
-      console.error("Error parsing request body AQUI:", error);
-      return reply.status(400).send("Bad Request teste"); // Bad Request if parsing fails
+      console.error("Error parsing request body:", error);
+      return reply.status(400).send("Bad Request: " + error.message); // Bad Request if parsing fails
     }
   });
 
@@ -30,8 +31,10 @@ export async function userRoutes(app: FastifyInstance) {
     });
 
     try {
+      console.log("Request Params:", request.params); // Log para depuração
       const { id: googleId } = paramsSchema.parse(request.params);
 
+      console.log("Google ID:", googleId); // Log do googleId para depuração
       const user = await prisma.user.findUnique({
         where: { googleId },
         include: {
@@ -46,13 +49,14 @@ export async function userRoutes(app: FastifyInstance) {
       if (!user) {
         return reply
           .status(401)
-          .send("Não autorizado ou não existe tal usuario! 😞 ");
+          .send("Unauthorized or user does not exist! 😞");
       }
 
+      console.log("User Data:", user); // Log para verificação dos dados do usuário
       return user;
     } catch (error) {
-      console.error("Error processing request BOLACHA:", error);
-      return reply.status(400).send("Bad Request 2");
+      console.error("Error processing request:", error);
+      return reply.status(400).send("Bad Request: " + error.message);
     }
   });
 }
