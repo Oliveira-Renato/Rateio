@@ -21,7 +21,7 @@ interface PropsParticipants {
 const saveGroup = async (groupData: PropsGroup) => {
   try {
     const response = await axios.post(
-      "https://rateio-server.netlify.app/.netlify/functions/api/groups",
+      "http://localhost:8888/.netlify/functions/api/groups",
       groupData
     );
     const { data } = await response;

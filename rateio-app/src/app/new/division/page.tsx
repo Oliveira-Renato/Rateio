@@ -27,7 +27,7 @@ export default function Division() {
       if (session) {
         try {
           const response = await axios.get(
-            `https://rateio-server.netlify.app/.netlify/functions/api/groups/${groupId}?userId=${session.googleId}`
+            `http://localhost:8888/.netlify/functions/api/groups/${groupId}?userId=${session.googleId}`
           );
 
           if (response.data) {
