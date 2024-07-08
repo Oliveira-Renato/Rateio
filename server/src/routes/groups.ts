@@ -1,6 +1,6 @@
-import { FastifyInstance, FastifyReply } from 'fastify'
-import { z } from 'zod'
-import { prisma } from '../lib/prisma'
+import { FastifyInstance, FastifyReply } from "fastify";
+import { z } from "zod";
+import { prisma } from "../lib/prisma";
 
 enum HttpStatus {
   Ok = 200,
@@ -9,13 +9,17 @@ enum HttpStatus {
   InternalServerError = 500,
 }
 
-async function handleErrors(reply: FastifyReply, statusCode: HttpStatus, message: string): Promise<void> {
+async function handleErrors(
+  reply: FastifyReply,
+  statusCode: HttpStatus,
+  message: string
+): Promise<void> {
   console.error(`Error: ${statusCode} - ${message}`);
   return reply.status(statusCode).send(message);
 }
 
 export async function groupsRoutes(app: FastifyInstance): Promise<void> {
-  app.get('/groups', async (request, reply) => {
+  app.get("/groups", async (request, reply) => {
     const groupSchema = z.object({
       userId: z.string(),
     });
@@ -24,17 +28,25 @@ export async function groupsRoutes(app: FastifyInstance): Promise<void> {
       const { userId } = groupSchema.parse(request.query);
 
       if (!userId) {
-        return handleErrors(reply, HttpStatus.Unauthorized, 'Usuário não autenticado');
+        return handleErrors(
+          reply,
+          HttpStatus.Unauthorized,
+          "Usuário não autenticado"
+        );
       }
 
       const groups = await prisma.group.findMany();
       return groups;
     } catch (error) {
-      return handleErrors(reply, HttpStatus.BadRequest, 'Erro na solicitação');
+      return handleErrors(
+        reply,
+        HttpStatus.BadRequest,
+        "Erro na solicitação teste"
+      );
     }
   });
 
-  app.get('/groups/:id', async (request, reply) => {
+  app.get("/groups/:id", async (request, reply) => {
     const paramsSchema = z.object({
       id: z.string().uuid(),
     });
@@ -52,22 +64,24 @@ export async function groupsRoutes(app: FastifyInstance): Promise<void> {
           id,
         },
         include: {
-          participants: true
+          participants: true,
         },
       });
 
       if (!group || group.userId !== userId) {
-        return reply.status(401).send('Não autorizado ou não existe tal grupo! 😞 ');
+        return reply
+          .status(401)
+          .send("Não autorizado ou não existe tal grupo! 😞 ");
       }
 
       return group;
     } catch (error) {
-      console.error('Error processing request:', error);
-      return reply.status(400).send('Bad Request');
+      console.error("Error processing request:", error);
+      return reply.status(400).send("Bad Request test");
     }
   });
 
-  app.post('/groups', async (request, reply) => {
+  app.post("/groups", async (request, reply) => {
     const bodySchema = z.object({
       name: z.string(),
       userId: z.string(),
@@ -83,7 +97,7 @@ export async function groupsRoutes(app: FastifyInstance): Promise<void> {
       });
 
       if (!user) {
-        return reply.status(401).send('Usuário inválido ou não autenticado 😠');
+        return reply.status(401).send("Usuário inválido ou não autenticado 😠");
       }
 
       const group = await prisma.group.create({
@@ -95,12 +109,12 @@ export async function groupsRoutes(app: FastifyInstance): Promise<void> {
 
       return group;
     } catch (error) {
-      console.error('Error processing request:', error);
-      return reply.status(500).send('Erro interno do servidor');
+      console.error("Error processing request:", error);
+      return reply.status(500).send("Erro interno do servidor");
     }
   });
 
-  app.put('/groups/:id', async (request, reply) => {
+  app.put("/groups/:id", async (request, reply) => {
     const paramsSchema = z.object({
       id: z.string().uuid(),
     });
@@ -121,11 +135,13 @@ export async function groupsRoutes(app: FastifyInstance): Promise<void> {
       let group = await prisma.group.findUnique({
         where: {
           id,
-        }
+        },
       });
 
       if (!group || group.userId !== userId) {
-        return reply.status(401).send('Não autorizado ou não existe tal grupo! 😞');
+        return reply
+          .status(401)
+          .send("Não autorizado ou não existe tal grupo! 😞");
       }
 
       group = await prisma.group.update({
@@ -135,16 +151,16 @@ export async function groupsRoutes(app: FastifyInstance): Promise<void> {
         data: {
           name,
         },
-      })
+      });
 
       return group;
     } catch (error) {
-      console.error('Error processing request:', error);
-      return reply.status(500).send('Erro interno do servidor');
+      console.error("Error processing request:", error);
+      return reply.status(500).send("Erro interno do servidor");
     }
   });
 
-  app.delete('/groups/:id', async (request, reply) => {
+  app.delete("/groups/:id", async (request, reply) => {
     const paramsSchema = z.object({
       id: z.string().uuid(),
     });
@@ -162,12 +178,16 @@ export async function groupsRoutes(app: FastifyInstance): Promise<void> {
           id,
         },
         include: {
-          participants: true
+          participants: true,
         },
       });
 
       if (!group || group.userId !== userId) {
-        return handleErrors(reply, HttpStatus.Unauthorized, 'Não autorizado ou grupo não existe');
+        return handleErrors(
+          reply,
+          HttpStatus.Unauthorized,
+          "Não autorizado ou grupo não existe"
+        );
       }
 
       // Exclua os participantes do grupo
@@ -184,10 +204,12 @@ export async function groupsRoutes(app: FastifyInstance): Promise<void> {
         },
       });
 
-      return reply.status(HttpStatus.Ok).send('Grupo excluído com sucesso');
+      return reply.status(HttpStatus.Ok).send("Grupo excluído com sucesso");
     } catch (error) {
-      console.error('Error processing request:', error);
-      return reply.status(HttpStatus.InternalServerError).send('Erro interno do servidor');
+      console.error("Error processing request:", error);
+      return reply
+        .status(HttpStatus.InternalServerError)
+        .send("Erro interno do servidor");
     }
   });
 }

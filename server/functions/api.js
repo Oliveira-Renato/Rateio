@@ -8,8 +8,23 @@ const { registerUser } = require('../src/routes/register');
 
 const app = fastify({ logger: true });
 
+const allowedOrigins = [
+  'https://rateio-server.netlify.app',
+  'https://rateio-app.vercel.app'
+];
+
+// Configuração do middleware CORS
 app.register(cors, {
-  origin: true,
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  methods: ['GET', 'POST', 'PUT', 'DELETE'], // Métodos permitidos
+  allowedHeaders: ['Content-Type', 'Authorization'], // Cabeçalhos permitidos
+  credentials: true // Permitir envio de cookies e cabeçalhos de autenticação
 });
 
 // Adiciona o prefixo '/.netlify/functions/api' a todas as rotas
